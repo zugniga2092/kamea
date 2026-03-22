@@ -1002,6 +1002,42 @@
       background: transparent; color: var(--color-accent);
     }
 
+    /* ====== BANNER COOKIES ====== */
+    #cookie-banner {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+      background: var(--color-primary);
+      border-top: 1px solid rgba(200,150,60,0.3);
+      padding: 1.2rem 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+      flex-wrap: wrap;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+    }
+    #cookie-banner.visible { transform: translateY(0); }
+    .cookie-text {
+      font-family: var(--font-sub);
+      font-size: 0.82rem; color: var(--color-text-light);
+      line-height: 1.6; flex: 1; min-width: 200px;
+    }
+    .cookie-text a { color: var(--color-accent); text-decoration: underline; }
+    .cookie-btns { display: flex; gap: 0.75rem; flex-shrink: 0; }
+    .cookie-btn {
+      padding: 0.55rem 1.2rem;
+      font-family: var(--font-sub);
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; border: 1px solid var(--color-accent);
+      transition: background var(--transition), color var(--transition);
+    }
+    .cookie-btn-accept {
+      background: var(--color-accent); color: var(--color-primary);
+    }
+    .cookie-btn-accept:hover { background: transparent; color: var(--color-accent); }
+    .cookie-btn-reject {
+      background: transparent; color: var(--color-accent);
+    }
+    .cookie-btn-reject:hover { background: var(--color-accent); color: var(--color-primary); }
+
     .footer-bottom {
       display: flex; align-items: center;
       justify-content: space-between;
@@ -1562,6 +1598,18 @@
 
   </div>
 
+  <!-- ====== BANNER COOKIES ====== -->
+  <div id="cookie-banner" role="dialog" aria-label="Aviso de cookies">
+    <p class="cookie-text">
+      Usamos cookies propias para mejorar tu experiencia. Puedes aceptarlas o rechazarlas.
+      <a href="politica-cookies.html">Más información</a>
+    </p>
+    <div class="cookie-btns">
+      <button class="cookie-btn cookie-btn-reject" onclick="cookieChoice(false)">Rechazar</button>
+      <button class="cookie-btn cookie-btn-accept" onclick="cookieChoice(true)">Aceptar</button>
+    </div>
+  </div>
+
   <!-- ====== FOOTER ====== -->
   <footer id="footer" aria-label="Pie de página">
     <div class="section-container">
@@ -1781,6 +1829,16 @@
 
     const autoplay = setInterval(() => goToSlide(currentSlide + 1), 5000);
     document.getElementById('testimonios').addEventListener('mouseenter', () => clearInterval(autoplay));
+
+    // 12. BANNER COOKIES
+    const cookieBanner = document.getElementById('cookie-banner');
+    if (!localStorage.getItem('cookies_choice')) {
+      setTimeout(() => cookieBanner.classList.add('visible'), 1800);
+    }
+    function cookieChoice(accepted) {
+      localStorage.setItem('cookies_choice', accepted ? 'accepted' : 'rejected');
+      cookieBanner.classList.remove('visible');
+    }
 
   </script>
 
