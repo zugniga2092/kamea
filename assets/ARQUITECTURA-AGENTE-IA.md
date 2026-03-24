@@ -407,3 +407,35 @@ PORT=3000
 - [ ] Configurar workflows en n8n apuntando al endpoint del nuevo servicio
 - [ ] Prueba completa con el dueño en modo admin
 - [ ] Entrega y formación al dueño (30 minutos)
+
+
+Lo que necesita una clínica estética (resumen ejecutivo)
+Comunicación y trato
+
+Agente que trate de usted / "estimado señor/a" — nunca tutear
+Multiidioma: español e inglés mínimo
+Tono cálido pero profesional
+
+Gestión de citas
+
+Recordatorios automáticos 24/48h antes
+Reagendado y cancelación sin intervención humana
+Lista de espera cuando hay cancelaciones
+
+Seguimiento de tratamientos
+
+Recordatorios según frecuencia del tratamiento: mensual, trimestral, anual
+Post-tratamiento: instrucciones de cuidados específicas según lo que se hizo (postratamiento de láser ≠ postratamiento de bótox)
+Encuesta de satisfacción automática tras cada visita
+
+Captación y fidelización
+
+Respuesta 24/7 a dudas sobre tratamientos, precios, contraindicaciones básicas
+Cualificación del lead antes de proponer cita
+Reactivación de pacientes inactivos
+Sugerencia de tratamientos complementarios en el momento oportuno
+
+Control y datos
+
+Dashboard con leads por canal, conversiones, no-shows, ingresos por tratamiento
+Informes automáticos semanales/mensuales para dirección

@@ -22,6 +22,8 @@ Los dos bots comparten el mismo patrón de etiquetas y stack tecnológico, pero 
 
 Archivos HTML estáticos: `index.html`, `aviso-legal.html`, `politica-cookies.html`, `politica-privacidad.html`. Sin build step ni dependencias. Edición directa.
 
+Recursos estáticos en `assets/`: imágenes de galería y hero, logo, favicon, y PDFs de las cartas (`carta-almuerzos.pdf`, `carta-cocina.pdf`).
+
 ---
 
 ## Bot Bodega Ruzafa (`bot/`)
@@ -32,10 +34,12 @@ Bot de Telegram para una bodega boutique en Ruzafa, Valencia. Arquitectura monol
 
 ```bash
 cd bot
-npm install
+npm install        # requiere Node >=18
 npm run dev    # node --watch index.js
 npm start      # node index.js
 ```
+
+El bot arranca siempre en **modo polling** (no webhook). No necesita URL pública para desarrollo local ni en Render.
 
 ### Variables de entorno (`bot/.env`)
 
@@ -54,9 +58,9 @@ PORT=3000
 - **Supabase:** Solo persiste clientes y reservas (no el historial de conversación).
 - **Agente IA:** `claude-sonnet-4-6` con system prompt generado en cada llamada (`buildSystemPrompt()` consulta la carta de vinos en Supabase en tiempo real).
 - **Endpoints REST** (llamados desde cron-job.org, no n8n):
-  - `GET /recordatorios` — Recordatorios 24h antes de la reserva
-  - `GET /reviews` — Solicitud de valoración 48h después
-  - `GET /reactivar` — Reactivación de clientes inactivos 30+ días
+  - `GET /recordatorios` — Recordatorios 24h antes de la reserva (cron: cada hora)
+  - `GET /reviews` — Solicitud de valoración 48h después (cron: cada hora)
+  - `GET /reactivar` — Reactivación de clientes inactivos 30+ días (cron: semanal)
 - **Deploy:** Render.com (Root Directory: `bot`, Build: `npm install`, Start: `node index.js`)
 
 ### Comandos admin (solo para ADMIN_CHAT_ID)
@@ -69,7 +73,7 @@ Son palabras clave en mayúsculas, sin pasar por Claude:
 | `SEMANA` | Reservas confirmadas de la semana |
 | `CLIENTES` | Total de clientes en BD |
 | `CANCELAR N` | Cancela la reserva número N de hoy y notifica al cliente |
-| `PROMO` | Notifica al admin para enviar una oferta |
+| `PROMO` | Notifica al admin para enviar una oferta (**sin restricción de admin** en el código — cualquier usuario puede activarlo) |
 | `AYUDA` | Lista de comandos disponibles |
 
 ### Patrón de etiqueta de reserva
@@ -156,7 +160,7 @@ Las etiquetas son interceptadas antes de llegar al cliente. El contrato formato-
 
 Cada bot usa su propia instancia de Supabase. Todas las tablas tienen `business_id` para arquitectura multi-cliente.
 
-`bot/` (Bodega Ruzafa) usa: `clientes`, `reservas` (con campos `recordatorio_enviado` y `review_enviado`), `vinos`.
+`bot/` (Bodega Ruzafa) usa: `clientes` (campos relevantes: `chat_id`, `nombre`, `telefono`, `ultima_visita`, `ultima_reactivacion`), `reservas` (campos relevantes: `recordatorio_enviado`, `review_enviado`, `estado`), `vinos` (campos: `nombre`, `variedad`, `precio`, `descripcion`, `activo`).
 
 `kamea-bot/` (Kamea) usa: `conversaciones`, `clientes`, `reservas`, `preguntas_desconocidas`, `menu_dia`, `notificaciones`.
 
@@ -168,12 +172,3 @@ Solo cambian las variables de entorno y el system prompt en `agent.js`. El códi
 
 ---
 
-## Estado del Proyecto
-
-- [x] `bot/` (Bodega Ruzafa) — Funcional y en git
-- [x] Web Kamea — HTML estático en raíz, funcional
-- [x] `kamea-bot/` — Funcional en local, pendiente de deploy en Railway
-- [ ] `kamea-bot/` — Pruebas end-to-end con Alex como admin (en curso)
-- [ ] `kamea-bot/` — Deploy en Railway
-- [ ] `kamea-bot/` — Migración a WhatsApp (pendiente SIM de Alex)
-- [ ] `kamea-bot/` — Automatizaciones n8n (código listo, falta configurar en n8n)
