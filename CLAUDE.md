@@ -22,7 +22,7 @@ Los dos bots comparten el mismo patrón de etiquetas y stack tecnológico, pero 
 
 Archivos HTML estáticos: `index.html`, `aviso-legal.html`, `politica-cookies.html`, `politica-privacidad.html`. Sin build step ni dependencias. Edición directa.
 
-Recursos estáticos en `assets/`: imágenes de galería y hero, logo, favicon, y PDFs de las cartas (`carta-almuerzos.pdf`, `carta-cocina.pdf`).
+Recursos estáticos en `assets/`: imágenes (`foto-hero.jpeg`, `foto-nosotros.jpeg`, `galeria-1.jpeg`…`galeria-9.jpeg`), `logo.png`, `favicon.png`, PDFs de las cartas (`carta-almuerzos.pdf`, `carta-cocina.pdf`) y documento de arquitectura (`ARQUITECTURA-AGENTE-IA.md`).
 
 ---
 
@@ -70,7 +70,7 @@ Son palabras clave en mayúsculas, sin pasar por Claude:
 | Mensaje | Acción |
 |---|---|
 | `JAIRO2024` | Lista reservas de hoy |
-| `SEMANA` | Reservas confirmadas de la semana |
+| `SEMANA` | Reservas confirmadas desde hoy (bug: filtra por `created_at >= hoy`, no por rango de fecha de la reserva) |
 | `CLIENTES` | Total de clientes en BD |
 | `CANCELAR N` | Cancela la reserva número N de hoy y notifica al cliente |
 | `PROMO` | Notifica al admin para enviar una oferta (**sin restricción de admin** en el código — cualquier usuario puede activarlo) |
@@ -85,6 +85,8 @@ Cuando Claude confirma una reserva emite esta etiqueta (y nada más):
 ```
 
 `index.js` intercepta la etiqueta, guarda en Supabase con `estado='confirmada'`, notifica al admin y responde al cliente con "Perfecto, todo anotado. Nos vemos pronto." La etiqueta nunca llega al cliente. Después inyecta un mensaje de sistema en el historial para que Claude no repita la etiqueta.
+
+**Importante — formato `fecha` en `bot/`:** A diferencia de `kamea-bot/`, aquí `reservas.fecha` almacena `DD/MM/YYYY` (sin conversión) y los endpoints cron también consultan por ese mismo formato — es coherente. No es un bug.
 
 ---
 

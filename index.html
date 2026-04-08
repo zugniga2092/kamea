@@ -1005,38 +1005,60 @@
     /* ====== BANNER COOKIES ====== */
     #cookie-banner {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
-      background: var(--color-primary);
-      border-top: 1px solid rgba(200,150,60,0.3);
-      padding: 1.2rem 2rem;
-      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+      background: #1a1510;
+      border-top: 2px solid rgba(200,150,60,0.4);
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
+      padding: 2rem 3rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 2.5rem;
       flex-wrap: wrap;
       transform: translateY(100%);
-      transition: transform 0.4s ease;
+      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
     }
     #cookie-banner.visible { transform: translateY(0); }
+    .cookie-inner {
+      display: flex; flex-direction: column; gap: 0.4rem;
+      flex: 1; min-width: 260px;
+    }
+    .cookie-title {
+      font-family: var(--font-main);
+      font-size: 1rem; font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: 0.04em;
+    }
     .cookie-text {
       font-family: var(--font-sub);
-      font-size: 0.82rem; color: var(--color-text-light);
-      line-height: 1.6; flex: 1; min-width: 200px;
+      font-size: 0.9rem; color: rgba(245,240,232,0.75);
+      line-height: 1.65;
     }
     .cookie-text a { color: var(--color-accent); text-decoration: underline; }
-    .cookie-btns { display: flex; gap: 0.75rem; flex-shrink: 0; }
+    .cookie-btns {
+      display: flex; flex-direction: column; gap: 0.65rem;
+      flex-shrink: 0; min-width: 180px;
+    }
     .cookie-btn {
-      padding: 0.55rem 1.2rem;
+      padding: 0.85rem 2rem;
       font-family: var(--font-sub);
-      font-size: 0.75rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
       cursor: pointer; border: 1px solid var(--color-accent);
       transition: background var(--transition), color var(--transition);
+      text-align: center;
     }
     .cookie-btn-accept {
       background: var(--color-accent); color: var(--color-primary);
     }
     .cookie-btn-accept:hover { background: transparent; color: var(--color-accent); }
     .cookie-btn-reject {
-      background: transparent; color: var(--color-accent);
+      background: transparent; color: rgba(245,240,232,0.5);
+      border-color: rgba(245,240,232,0.2);
+      font-size: 0.75rem;
     }
-    .cookie-btn-reject:hover { background: var(--color-accent); color: var(--color-primary); }
+    .cookie-btn-reject:hover { color: var(--color-text-light); border-color: rgba(245,240,232,0.5); }
+    @media (max-width: 600px) {
+      #cookie-banner { padding: 1.5rem 1.25rem; gap: 1.5rem; }
+      .cookie-btns { flex-direction: row; min-width: unset; width: 100%; }
+      .cookie-btn { flex: 1; padding: 0.75rem 1rem; }
+    }
 
     .footer-bottom {
       display: flex; align-items: center;
@@ -1063,8 +1085,17 @@
     }
 
     @media (max-width: 768px) {
+      /* Navegación */
       .nav-links, .nav-logo-name { display: none; }
       .hamburger { display: flex; }
+
+      /* Contenedor y secciones */
+      .section-container { padding: 0 1.5rem; }
+      #nosotros, #experiencias, #carta, #galeria,
+      #testimonios, #reservas, #contacto { padding: 5rem 0; }
+      #footer { padding: 4rem 0 2rem; }
+
+      /* Grids */
       .servicios-grid  { grid-template-columns: 1fr; }
       .galeria-grid    { grid-template-columns: repeat(2, 1fr); }
       .reservas-grid   { grid-template-columns: 1fr; }
@@ -1072,12 +1103,51 @@
       .footer-top      { grid-template-columns: 1fr; }
       .footer-bottom   { flex-direction: column; text-align: center; }
       .stats-grid      { grid-template-columns: repeat(3,1fr); gap: 1rem; }
-      .hero-title      { font-size: clamp(2.2rem, 8vw, 3rem); }
+
+      /* Hero */
+      .hero-title    { font-size: clamp(2.2rem, 8vw, 3rem); }
+      .hero-subtitle { font-size: 1.1rem; }
+      .hero-eyebrow  { font-size: 0.8rem; }
+
+      /* Tipografía — aumentar peso y tamaño para móvil */
+      body { font-weight: 400; }
+      .nosotros-narrative  { font-size: 1.05rem; }
+      .experiencias-subtitle, .reservas-subtitle,
+      .carta-subtitle      { font-size: 1.05rem; }
+      .servicio-desc       { font-size: 1rem; }
+      .testimonio-texto    { font-size: 1.1rem; }
+      .info-text           { font-size: 0.95rem; }
+      .info-horarios       { font-size: 0.92rem; }
+      .info-aviso          { font-size: 0.88rem; }
+      .reservas-cta-nota   { font-size: 0.95rem; }
+      .reservas-cta-text strong { font-size: 0.8rem; }
+      .reservas-cta-text span   { font-size: 1.3rem; }
+      .stat-label          { font-size: 0.8rem; }
+      .btn-primary         { font-size: 0.88rem; padding: 0.9rem 2.2rem; }
+      .btn-outline         { font-size: 0.84rem; }
+      .carta-menu-label    { font-size: 0.75rem; }
+      .carta-menu-desc     { font-size: 0.95rem; }
+      .carta-menu-arrow    { font-size: 0.8rem; }
+      .footer-col ul li a  { font-size: 0.95rem; font-weight: 400; }
+      .footer-newsletter p { font-size: 0.9rem; font-weight: 400; }
+      .newsletter-input    { font-size: 0.9rem; }
+      .footer-col-title    { font-size: 0.78rem; }
+      .footer-copy         { font-size: 0.82rem; font-weight: 400; }
+      .footer-legal a      { font-size: 0.82rem; font-weight: 400; }
+      .mapa-link           { font-size: 0.82rem; }
+      .cookie-text         { font-size: 0.88rem; }
+
+      /* Cursor: restaurar comportamiento táctil */
+      body, button { cursor: auto; }
+      a, button    { cursor: pointer; }
+      #custom-cursor { display: none; }
     }
 
     @media (max-width: 480px) {
       .galeria-grid { grid-template-columns: repeat(2, 1fr); }
       .section-container { padding: 0 1.2rem; }
+      .stat-number { font-size: 2.2rem; }
+      .servicio-card { padding: 2rem 1.5rem; }
     }
 
     @media (min-width: 1440px) {
@@ -1600,13 +1670,16 @@
 
   <!-- ====== BANNER COOKIES ====== -->
   <div id="cookie-banner" role="dialog" aria-label="Aviso de cookies">
-    <p class="cookie-text">
-      Usamos cookies propias para mejorar tu experiencia. Puedes aceptarlas o rechazarlas.
-      <a href="politica-cookies.html">Más información</a>
-    </p>
+    <div class="cookie-inner">
+      <span class="cookie-title">Este sitio utiliza cookies</span>
+      <p class="cookie-text">
+        Usamos cookies propias para mejorar tu experiencia de navegación y analizar el tráfico de la web.
+        Puedes aceptarlas o rechazarlas. <a href="politica-cookies.html">Más información</a>
+      </p>
+    </div>
     <div class="cookie-btns">
-      <button class="cookie-btn cookie-btn-reject" onclick="cookieChoice(false)">Rechazar</button>
-      <button class="cookie-btn cookie-btn-accept" onclick="cookieChoice(true)">Aceptar</button>
+      <button class="cookie-btn cookie-btn-accept" onclick="cookieChoice(true)">Aceptar todas</button>
+      <button class="cookie-btn cookie-btn-reject" onclick="cookieChoice(false)">Solo necesarias</button>
     </div>
   </div>
 
