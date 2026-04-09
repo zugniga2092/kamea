@@ -1003,25 +1003,38 @@
     }
 
     /* ====== BANNER COOKIES ====== */
-    #cookie-banner {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
-      background: #1a1510;
-      border-top: 2px solid rgba(200,150,60,0.4);
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
-      padding: 2rem 3rem;
-      display: flex; align-items: center; justify-content: space-between; gap: 2.5rem;
-      flex-wrap: wrap;
-      transform: translateY(100%);
-      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    #cookie-overlay {
+      position: fixed; inset: 0; z-index: 9998;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(2px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.45s;
     }
-    #cookie-banner.visible { transform: translateY(0); }
+    #cookie-overlay.visible { opacity: 1; pointer-events: all; }
+    #cookie-banner {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -48%) scale(0.97);
+      z-index: 9999;
+      width: 90%; max-width: 500px;
+      background: #1a1510;
+      border: 1px solid rgba(200,150,60,0.45);
+      box-shadow: 0 16px 64px rgba(0,0,0,0.75);
+      padding: 2.5rem 2.5rem 2rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    #cookie-banner.visible {
+      opacity: 1; pointer-events: all;
+      transform: translate(-50%, -50%) scale(1);
+    }
     .cookie-inner {
-      display: flex; flex-direction: column; gap: 0.4rem;
-      flex: 1; min-width: 260px;
+      display: flex; flex-direction: column; gap: 0.5rem;
     }
     .cookie-title {
       font-family: var(--font-main);
-      font-size: 1rem; font-weight: 500;
+      font-size: 1.05rem; font-weight: 500;
       color: var(--color-accent);
       letter-spacing: 0.04em;
     }
@@ -1033,7 +1046,6 @@
     .cookie-text a { color: var(--color-accent); text-decoration: underline; }
     .cookie-btns {
       display: flex; flex-direction: column; gap: 0.65rem;
-      flex-shrink: 0; min-width: 180px;
     }
     .cookie-btn {
       padding: 0.85rem 2rem;
@@ -1055,8 +1067,17 @@
     }
     .cookie-btn-reject:hover { color: var(--color-text-light); border-color: rgba(245,240,232,0.5); }
     @media (max-width: 600px) {
-      #cookie-banner { padding: 1.5rem 1.25rem; gap: 1.5rem; }
-      .cookie-btns { flex-direction: row; min-width: unset; width: 100%; }
+      #cookie-banner {
+        top: auto; bottom: 0; left: 0; right: 0;
+        transform: translateY(8px) scale(0.99);
+        width: 100%; max-width: 100%;
+        border-radius: 0; border-bottom: none;
+        padding: 2rem 1.5rem 2.5rem;
+      }
+      #cookie-banner.visible {
+        transform: translateY(0) scale(1);
+      }
+      .cookie-btns { flex-direction: row; }
       .cookie-btn { flex: 1; padding: 0.75rem 1rem; }
     }
 
@@ -1669,7 +1690,8 @@
   </div>
 
   <!-- ====== BANNER COOKIES ====== -->
-  <div id="cookie-banner" role="dialog" aria-label="Aviso de cookies">
+  <div id="cookie-overlay"></div>
+  <div id="cookie-banner" role="dialog" aria-modal="true" aria-label="Aviso de cookies">
     <div class="cookie-inner">
       <span class="cookie-title">Este sitio utiliza cookies</span>
       <p class="cookie-text">
@@ -1905,12 +1927,19 @@
 
     // 12. BANNER COOKIES
     const cookieBanner = document.getElementById('cookie-banner');
+    const cookieOverlay = document.getElementById('cookie-overlay');
     if (!localStorage.getItem('cookies_choice')) {
-      setTimeout(() => cookieBanner.classList.add('visible'), 1800);
+      setTimeout(() => {
+        cookieBanner.classList.add('visible');
+        cookieOverlay.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      }, 1800);
     }
     function cookieChoice(accepted) {
       localStorage.setItem('cookies_choice', accepted ? 'accepted' : 'rejected');
       cookieBanner.classList.remove('visible');
+      cookieOverlay.classList.remove('visible');
+      document.body.style.overflow = '';
     }
 
   </script>
