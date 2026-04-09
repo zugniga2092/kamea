@@ -6,9 +6,53 @@
   <title>Kamea Gastro Bar | Cocina con alma en San Antonio de Benagéber, Valencia</title>
   <meta name="description" content="Gastro bar en San Antonio de Benagéber, Valencia. Menú del día, almuerzos, cenas de fin de semana y eventos privados. C/ Olmos 7. Tel: 631 96 29 43 / 960 81 18 48.">
   <meta name="keywords" content="Kamea Gastro Bar, restaurante San Antonio Benagéber, menú del día Valencia, cenas Valencia, gastro bar Valencia, eventos privados Valencia, terraza Valencia">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
   <meta property="og:title" content="Kamea Gastro Bar | San Antonio de Benagéber, Valencia">
   <meta property="og:description" content="Cocina de mercado, producto local y ambiente único. Menú del día, almuerzos y cenas especiales en la C/ Olmos 7.">
+  <!-- og:image: actualizar con URL absoluta del dominio final -->
+  <meta property="og:image" content="assets/foto-hero.jpeg">
   <link rel="icon" type="image/png" href="assets/favicon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Kamea Gastro Bar",
+    "description": "Gastro bar de cocina de mercado en San Antonio de Benagéber, Valencia. Menú del día, almuerzos, cenas de fin de semana y eventos privados.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Calle Olmos 7",
+      "addressLocality": "San Antonio de Benagéber",
+      "addressRegion": "Valencia",
+      "postalCode": "46184",
+      "addressCountry": "ES"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 39.5832,
+      "longitude": -0.5318
+    },
+    "telephone": "+34631962943",
+    "servesCuisine": ["Cocina de mercado", "Española", "Mediterránea"],
+    "priceRange": "€€",
+    "currenciesAccepted": "EUR",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+        "opens": "09:00",
+        "closes": "16:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Friday","Saturday"],
+        "opens": "20:00",
+        "closes": "00:00"
+      }
+    ],
+    "sameAs": "https://www.instagram.com/kameagastro/"
+  }
+  </script>
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -660,6 +704,7 @@
     .galeria-item {
       position: relative; overflow: hidden;
       aspect-ratio: 1 / 1;
+      cursor: pointer;
     }
     .galeria-item img {
       width: 100%; height: 100%; display: block;
@@ -1098,6 +1143,55 @@
     }
     .footer-legal a:hover { color: var(--color-accent-light); }
 
+    /* ====== LIGHTBOX GALERÍA ====== */
+    #lightbox {
+      position: fixed; inset: 0; z-index: 9990;
+      background: rgba(0,0,0,0.93);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    #lightbox.active { opacity: 1; pointer-events: all; }
+    #lb-img-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+      max-width: 90vw;
+    }
+    #lb-img {
+      max-width: 90vw; max-height: 82vh;
+      object-fit: contain;
+      border: 1px solid rgba(200,150,60,0.2);
+      display: block;
+    }
+    #lb-caption {
+      font-family: var(--font-sub); font-style: italic;
+      font-size: 0.95rem; color: rgba(245,240,232,0.6);
+    }
+    #lb-counter {
+      font-family: var(--font-body); font-size: 0.72rem;
+      color: rgba(245,240,232,0.35); letter-spacing: 0.15em;
+    }
+    #lb-close {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      background: none; border: none; color: rgba(245,240,232,0.7);
+      cursor: pointer; padding: 0.5rem; line-height: 0;
+      transition: color 0.2s;
+    }
+    #lb-close:hover { color: var(--color-accent); }
+    #lb-prev, #lb-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(200,150,60,0.25);
+      color: rgba(245,240,232,0.75); cursor: pointer;
+      padding: 1rem 0.75rem; line-height: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    #lb-prev:hover, #lb-next:hover { background: rgba(200,150,60,0.2); color: var(--color-accent); }
+    #lb-prev { left: 1.25rem; }
+    #lb-next { right: 1.25rem; }
+    @media (max-width: 600px) {
+      #lb-prev { left: 0.4rem; padding: 0.75rem 0.6rem; }
+      #lb-next { right: 0.4rem; padding: 0.75rem 0.6rem; }
+    }
+
     /* ====== BOTÓN VOLVER ARRIBA ====== */
     #back-to-top {
       position: fixed; bottom: 2rem; right: 1.5rem; z-index: 900;
@@ -1197,6 +1291,24 @@
 
   <!-- ====== CURSOR ====== -->
   <div id="custom-cursor" aria-hidden="true"></div>
+
+  <!-- ====== LIGHTBOX ====== -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Visor de imagen">
+    <button id="lb-close" aria-label="Cerrar imagen">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <button id="lb-prev" aria-label="Imagen anterior">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div id="lb-img-wrap">
+      <img id="lb-img" src="" alt="">
+      <p id="lb-caption"></p>
+      <p id="lb-counter"></p>
+    </div>
+    <button id="lb-next" aria-label="Imagen siguiente">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
 
   <!-- ====== BOTÓN VOLVER ARRIBA ====== -->
   <button id="back-to-top" aria-label="Volver al inicio">
@@ -1533,6 +1645,20 @@
           <button class="slider-dot"        data-index="2" role="tab" aria-selected="false" aria-label="Testimonio 3"></button>
           <button class="slider-dot"        data-index="3" role="tab" aria-selected="false" aria-label="Testimonio 4"></button>
         </div>
+
+        <div style="text-align:center;margin-top:3rem;">
+          <a href="https://maps.app.goo.gl/WAnsjwWDfNgfmoAy9" target="_blank" rel="noopener noreferrer"
+             style="display:inline-flex;align-items:center;gap:0.6rem;padding:0.8rem 1.6rem;border:1px solid rgba(200,150,60,0.35);color:rgba(229,200,130,0.75);font-family:var(--font-body);font-size:0.78rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;transition:border-color 0.3s,color 0.3s;"
+             onmouseover="this.style.borderColor='#C8963C';this.style.color='#C8963C';"
+             onmouseout="this.style.borderColor='rgba(200,150,60,0.35)';this.style.color='rgba(229,200,130,0.75)';"
+             aria-label="Ver todas las reseñas en Google Maps">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+            Ver todas las reseñas en Google
+          </a>
+        </div>
+
       </div>
     </section>
 
@@ -1951,14 +2077,63 @@
     const autoplay = setInterval(() => goToSlide(currentSlide + 1), 5000);
     document.getElementById('testimonios').addEventListener('mouseenter', () => clearInterval(autoplay));
 
-    // 12. BOTÓN VOLVER ARRIBA
+    // 12. LIGHTBOX GALERÍA
+    const lbImages = [
+      { src: 'assets/galeria-1.jpeg', caption: 'Interior del restaurante' },
+      { src: 'assets/galeria-2.jpeg', caption: 'Eventos y celebraciones' },
+      { src: 'assets/galeria-3.jpeg', caption: 'Cocina de temporada' },
+      { src: 'assets/galeria-4.jpeg', caption: 'Producto de mercado' },
+      { src: 'assets/galeria-5.jpeg', caption: 'Selección gourmet' },
+      { src: 'assets/galeria-6.jpeg', caption: 'Terraza exterior' },
+      { src: 'assets/galeria-7.jpeg', caption: 'Cenas especiales' },
+      { src: 'assets/galeria-8.jpeg', caption: 'Detalle y precisión' },
+      { src: 'assets/galeria-9.jpeg', caption: 'Ambiente y carácter' },
+    ];
+    let lbCurrent = 0;
+    const lightbox = document.getElementById('lightbox');
+    const lbImg    = document.getElementById('lb-img');
+    const lbCap    = document.getElementById('lb-caption');
+    const lbCount  = document.getElementById('lb-counter');
+
+    function lbShow(index) {
+      lbCurrent = (index + lbImages.length) % lbImages.length;
+      const item = lbImages[lbCurrent];
+      lbImg.src = item.src; lbImg.alt = item.caption;
+      lbCap.textContent = item.caption;
+      lbCount.textContent = (lbCurrent + 1) + ' / ' + lbImages.length;
+    }
+    function openLightbox(index) {
+      lbShow(index);
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    document.getElementById('lb-prev').addEventListener('click', () => lbShow(lbCurrent - 1));
+    document.getElementById('lb-next').addEventListener('click', () => lbShow(lbCurrent + 1));
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape')      closeLightbox();
+      if (e.key === 'ArrowLeft')   lbShow(lbCurrent - 1);
+      if (e.key === 'ArrowRight')  lbShow(lbCurrent + 1);
+    });
+    document.querySelectorAll('.galeria-item').forEach((item, i) => {
+      item.addEventListener('click', () => openLightbox(i));
+    });
+
+    // 13. BOTÓN VOLVER ARRIBA
     const backToTop = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
       backToTop.classList.toggle('visible', window.scrollY > 400);
     }, { passive: true });
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // 13. BANNER COOKIES
+    // 14. BANNER COOKIES
     const cookieBanner = document.getElementById('cookie-banner');
     const cookieOverlay = document.getElementById('cookie-overlay');
     if (!localStorage.getItem('cookies_choice')) {
