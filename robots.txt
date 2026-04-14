@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /aviso-legal.html
+Disallow: /politica-cookies.html
+Disallow: /politica-privacidad.html
+
+Sitemap: https://kameagastro.es/sitemap.xml
